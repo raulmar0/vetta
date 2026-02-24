@@ -23,47 +23,156 @@ const allEvents = events;
         </p>
       </div>
       <button
-        id="toggle-events-btn"
-        class="px-6 py-2 rounded-full border-2 border-primary dark:border-white text-primary dark:text-white font-bold text-sm uppercase tracking-wider hover:bg-primary hover:text-white dark:hover:bg-white dark:hover:text-primary transition cursor-pointer whitespace-nowrap"
+        id="toggle-events-btn-top"
+        class="toggle-events-btn px-6 py-2 rounded-full border-2 border-primary dark:border-white text-primary dark:text-white font-bold text-sm uppercase tracking-wider hover:bg-primary hover:text-white dark:hover:bg-white dark:hover:text-primary transition cursor-pointer whitespace-nowrap"
       >
         Ver todo
       </button>
     </div>
 
-    <!-- Featured Events Grid -->
+    <!-- Featured Events -->
     <div id="featured-events">
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Desktop grid -->
+      <div class="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {featuredEvents.map((event) => <EventCard event={event} />)}
+      </div>
+      <!-- Mobile carousel -->
+      <div class="md:hidden">
+        <div
+          id="featured-carousel"
+          class="events-carousel flex gap-4 overflow-x-auto snap-x snap-mandatory -mx-4 px-4 pb-4"
+          style="scrollbar-width: none; -ms-overflow-style: none;"
+        >
+          {featuredEvents.map((event) => (
+            <div class="snap-center flex-shrink-0 w-[85vw]">
+              <EventCard event={event} />
+            </div>
+          ))}
+        </div>
+        <div class="flex justify-center gap-2 mt-2" id="featured-dots">
+          {featuredEvents.map((_, i) => (
+            <button
+              class:list={[
+                "w-2.5 h-2.5 rounded-full transition cursor-pointer",
+                i === 0 ? "bg-teal" : "bg-slate-300 dark:bg-slate-600",
+              ]}
+              data-index={i}
+              type="button"
+            />
+          ))}
+        </div>
       </div>
     </div>
 
-    <!-- All Events Grid (hidden by default) -->
+    <!-- All Events (hidden by default) -->
     <div id="all-events" style="display: none;">
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Desktop grid -->
+      <div class="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {allEvents.map((event) => <EventCard event={event} />)}
       </div>
+      <!-- Mobile carousel -->
+      <div class="md:hidden">
+        <div
+          id="all-carousel"
+          class="events-carousel flex gap-4 overflow-x-auto snap-x snap-mandatory -mx-4 px-4 pb-4"
+          style="scrollbar-width: none; -ms-overflow-style: none;"
+        >
+          {allEvents.map((event) => (
+            <div class="snap-center flex-shrink-0 w-[85vw]">
+              <EventCard event={event} />
+            </div>
+          ))}
+        </div>
+        <div class="flex justify-center gap-2 mt-2" id="all-dots">
+          {allEvents.map((_, i) => (
+            <button
+              class:list={[
+                "w-2.5 h-2.5 rounded-full transition cursor-pointer",
+                i === 0 ? "bg-teal" : "bg-slate-300 dark:bg-slate-600",
+              ]}
+              data-index={i}
+              type="button"
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom toggle button -->
+    <div class="flex justify-center mt-10">
+      <button
+        id="toggle-events-btn-bottom"
+        class="toggle-events-btn px-6 py-2 rounded-full border-2 border-primary dark:border-white text-primary dark:text-white font-bold text-sm uppercase tracking-wider hover:bg-primary hover:text-white dark:hover:bg-white dark:hover:text-primary transition cursor-pointer whitespace-nowrap"
+      >
+        Ver todo
+      </button>
     </div>
   </div>
 </section>
 
-<script is:inline>
-  const toggleBtn = document.getElementById("toggle-events-btn");
-  const featuredGrid = document.getElementById("featured-events");
-  const allGrid = document.getElementById("all-events");
-  let showingAll = false;
+<style>
+  .events-carousel::-webkit-scrollbar { display: none; }
+</style>
 
-  if (toggleBtn && featuredGrid && allGrid) {
-    toggleBtn.addEventListener("click", () => {
+<script is:inline>
+  (function () {
+    var buttons = document.querySelectorAll(".toggle-events-btn");
+    var featuredGrid = document.getElementById("featured-events");
+    var allGrid = document.getElementById("all-events");
+    var showingAll = false;
+
+    function toggle() {
       showingAll = !showingAll;
       if (showingAll) {
         featuredGrid.style.display = "none";
         allGrid.style.display = "";
-        toggleBtn.textContent = "Ver principales";
+        buttons.forEach(function (btn) { btn.textContent = "Ver principales"; });
       } else {
         featuredGrid.style.display = "";
         allGrid.style.display = "none";
-        toggleBtn.textContent = "Ver todo";
+        buttons.forEach(function (btn) { btn.textContent = "Ver todo"; });
       }
+    }
+
+    buttons.forEach(function (btn) {
+      btn.addEventListener("click", toggle);
     });
-  }
+
+    // Carousel dot logic
+    function setupCarousel(carouselId, dotsId) {
+      var carousel = document.getElementById(carouselId);
+      var dotsContainer = document.getElementById(dotsId);
+      if (!carousel || !dotsContainer) return;
+
+      var dots = dotsContainer.querySelectorAll("button");
+      var slides = Array.from(carousel.children);
+
+      function updateDots() {
+        if (slides.length === 0) return;
+        var slideWidth = slides[0].offsetWidth;
+        var gap = 16;
+        var idx = Math.round(carousel.scrollLeft / (slideWidth + gap));
+        idx = Math.max(0, Math.min(idx, dots.length - 1));
+        dots.forEach(function (dot, i) {
+          dot.className = "w-2.5 h-2.5 rounded-full transition cursor-pointer " +
+            (i === idx ? "bg-teal" : "bg-slate-300 dark:bg-slate-600");
+        });
+      }
+
+      carousel.addEventListener("scroll", updateDots);
+
+      dots.forEach(function (dot) {
+        dot.addEventListener("click", function () {
+          var idx = parseInt(dot.getAttribute("data-index"));
+          if (slides.length === 0) return;
+          var slideWidth = slides[0].offsetWidth;
+          var gap = 16;
+          carousel.scrollTo({ left: idx * (slideWidth + gap), behavior: "smooth" });
+        });
+      });
+    }
+
+    setupCarousel("featured-carousel", "featured-dots");
+    setupCarousel("all-carousel", "all-dots");
+  })();
 </script>

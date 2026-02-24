@@ -31,7 +31,7 @@ const desktopOrder = ["md:order-1", "md:order-2", "md:order-3"];
     <!-- Plans: carousel on mobile, grid on desktop -->
     <div
       id="plans-carousel"
-      class="flex gap-6 overflow-x-auto snap-x snap-mandatory -mx-4 px-4 pb-4 md:mx-0 md:px-0 md:pb-0 md:grid md:grid-cols-3 md:overflow-visible md:snap-none"
+      class="flex gap-6 overflow-x-auto snap-x snap-mandatory -mx-4 px-4 pt-5 pb-4 md:mx-0 md:px-0 md:pt-0 md:pb-0 md:grid md:grid-cols-3 md:overflow-visible md:snap-none"
     >
       {trainingPlans.map((plan, idx) => {
         const colors = colorMap[plan.color] || colorMap.teal;
