@@ -1,0 +1,69 @@
+---
+import { events, eventsHeading } from "../data/site";
+import EventCard from "./EventCard.astro";
+
+const featuredEvents = events.filter((e) => e.featured);
+const allEvents = events;
+---
+
+<section class="py-20 bg-white dark:bg-slate-900" id="calendario">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-4">
+      <div>
+        <h2
+          class="text-4xl md:text-6xl font-display uppercase text-primary dark:text-white leading-none"
+        >
+          {eventsHeading.title}
+          <span class="text-gradient">
+            {eventsHeading.ampersand}{eventsHeading.titleEnd}
+          </span>
+        </h2>
+        <p class="mt-4 text-slate-600 dark:text-slate-400 max-w-lg">
+          {eventsHeading.subtitle}
+        </p>
+      </div>
+      <button
+        id="toggle-events-btn"
+        class="px-6 py-2 rounded-full border-2 border-primary dark:border-white text-primary dark:text-white font-bold text-sm uppercase tracking-wider hover:bg-primary hover:text-white dark:hover:bg-white dark:hover:text-primary transition cursor-pointer whitespace-nowrap"
+      >
+        Ver todo
+      </button>
+    </div>
+
+    <!-- Featured Events Grid -->
+    <div id="featured-events">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {featuredEvents.map((event) => <EventCard event={event} />)}
+      </div>
+    </div>
+
+    <!-- All Events Grid (hidden by default) -->
+    <div id="all-events" style="display: none;">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {allEvents.map((event) => <EventCard event={event} />)}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script is:inline>
+  const toggleBtn = document.getElementById("toggle-events-btn");
+  const featuredGrid = document.getElementById("featured-events");
+  const allGrid = document.getElementById("all-events");
+  let showingAll = false;
+
+  if (toggleBtn && featuredGrid && allGrid) {
+    toggleBtn.addEventListener("click", () => {
+      showingAll = !showingAll;
+      if (showingAll) {
+        featuredGrid.style.display = "none";
+        allGrid.style.display = "";
+        toggleBtn.textContent = "Ver principales";
+      } else {
+        featuredGrid.style.display = "";
+        allGrid.style.display = "none";
+        toggleBtn.textContent = "Ver todo";
+      }
+    });
+  }
+</script>

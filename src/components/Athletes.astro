@@ -1,0 +1,176 @@
+---
+import { athletes } from "../data/site";
+---
+
+<section class="py-20 bg-bg-light dark:bg-bg-dark" id="atletas">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Heading -->
+    <div class="text-center mb-16">
+      <h2
+        class="text-4xl md:text-6xl font-display uppercase text-primary dark:text-white leading-none mb-4"
+      >
+        Atletas <span class="text-gradient">Destacados</span>
+      </h2>
+      <p class="text-lg text-slate-600 dark:text-slate-400 font-light max-w-2xl mx-auto">
+        Logros y trayectoria de nuestros ciclistas en competencias nacionales e internacionales.
+      </p>
+    </div>
+
+    <!-- Desktop Grid -->
+    <div class="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {athletes.map((athlete) => (
+        <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-xl transition duration-300 overflow-hidden">
+          <div class="p-6 pb-4 flex items-center gap-4">
+            <button
+              class:list={[
+                "w-16 h-16 rounded-full overflow-hidden border-3 flex-shrink-0 cursor-pointer",
+                athlete.borderColor === "teal" ? "border-teal" : "border-purple",
+              ]}
+              data-lightbox={athlete.image}
+              data-lightbox-alt={athlete.name}
+              type="button"
+            >
+              <img
+                alt={athlete.name}
+                class="w-full h-full object-cover object-center"
+                src={athlete.image}
+              />
+            </button>
+            <div>
+              <h3 class="text-xl font-display uppercase text-primary dark:text-white">
+                {athlete.name}
+              </h3>
+              <p
+                class:list={[
+                  "text-xs font-bold uppercase tracking-wider",
+                  athlete.borderColor === "teal" ? "text-teal" : "text-purple",
+                ]}
+              >
+                {athlete.role}
+              </p>
+            </div>
+          </div>
+          <div class="px-6 pb-6">
+            <ul class="space-y-2">
+              {athlete.achievements.map((achievement) => (
+                <li class="flex items-start gap-2 text-sm text-slate-600 dark:text-slate-400">
+                  <span class="material-icons text-teal text-sm mt-0.5">emoji_events</span>
+                  <span>{achievement}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Mobile Carousel -->
+    <div class="md:hidden">
+      <div
+        id="athletes-carousel"
+        class="flex gap-4 overflow-x-auto snap-x snap-mandatory -mx-4 px-4 pb-4"
+        style="scrollbar-width: none; -ms-overflow-style: none;"
+      >
+        {athletes.map((athlete) => (
+          <div class="snap-center flex-shrink-0 w-[85vw]">
+            <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm overflow-hidden h-full">
+              <div class="p-6 pb-4 flex items-center gap-4">
+                <button
+                  class:list={[
+                    "w-16 h-16 rounded-full overflow-hidden border-3 flex-shrink-0 cursor-pointer",
+                    athlete.borderColor === "teal" ? "border-teal" : "border-purple",
+                  ]}
+                  data-lightbox={athlete.image}
+                  data-lightbox-alt={athlete.name}
+                  type="button"
+                >
+                  <img
+                    alt={athlete.name}
+                    class="w-full h-full object-cover object-center"
+                    src={athlete.image}
+                  />
+                </button>
+                <div>
+                  <h3 class="text-xl font-display uppercase text-primary dark:text-white">
+                    {athlete.name}
+                  </h3>
+                  <p
+                    class:list={[
+                      "text-xs font-bold uppercase tracking-wider",
+                      athlete.borderColor === "teal" ? "text-teal" : "text-purple",
+                    ]}
+                  >
+                    {athlete.role}
+                  </p>
+                </div>
+              </div>
+              <div class="px-6 pb-6">
+                <ul class="space-y-2">
+                  {athlete.achievements.map((achievement) => (
+                    <li class="flex items-start gap-2 text-sm text-slate-600 dark:text-slate-400">
+                      <span class="material-icons text-teal text-sm mt-0.5">emoji_events</span>
+                      <span>{achievement}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+      <!-- Dots -->
+      <div class="flex justify-center gap-2 mt-2" id="athletes-dots">
+        {athletes.map((_, i) => (
+          <button
+            class:list={[
+              "w-2.5 h-2.5 rounded-full transition cursor-pointer",
+              i === 0 ? "bg-teal" : "bg-slate-300 dark:bg-slate-600",
+            ]}
+            data-index={i}
+            type="button"
+          />
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  #athletes-carousel::-webkit-scrollbar { display: none; }
+</style>
+
+<script is:inline>
+  (function () {
+    var carousel = document.getElementById("athletes-carousel");
+    var dotsContainer = document.getElementById("athletes-dots");
+    if (!carousel || !dotsContainer) return;
+
+    var dots = dotsContainer.querySelectorAll("button");
+    var slides = Array.from(carousel.children);
+
+    function updateDots() {
+      var scrollLeft = carousel.scrollLeft;
+      if (slides.length === 0) return;
+      var slideWidth = slides[0].offsetWidth;
+      var gap = 16;
+      var idx = Math.round(scrollLeft / (slideWidth + gap));
+      idx = Math.max(0, Math.min(idx, dots.length - 1));
+      dots.forEach(function (dot, i) {
+        dot.className = "w-2.5 h-2.5 rounded-full transition cursor-pointer " +
+          (i === idx ? "bg-teal" : "bg-slate-300 dark:bg-slate-600");
+      });
+    }
+
+    carousel.addEventListener("scroll", updateDots);
+
+    dots.forEach(function (dot) {
+      dot.addEventListener("click", function () {
+        var idx = parseInt(dot.getAttribute("data-index"));
+        if (slides.length === 0) return;
+        var slideWidth = slides[0].offsetWidth;
+        var gap = 16;
+        carousel.scrollTo({ left: idx * (slideWidth + gap), behavior: "smooth" });
+      });
+    });
+  })();
+</script>

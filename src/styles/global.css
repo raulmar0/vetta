@@ -1,0 +1,31 @@
+@import url("https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;600;700&display=swap");
+@import "tailwindcss";
+
+/* ─── Design Tokens ────────────────────────────────────────── */
+@theme {
+  --color-primary: #1e1b4b;
+  --color-secondary: #6366f1;
+  --color-teal: #2dd4bf;
+  --color-purple: #a855f7;
+
+  --color-bg-light: #f8fafc;
+  --color-bg-dark: #0f172a;
+
+  --font-display: "Anton", sans-serif;
+  --font-body: "Inter", sans-serif;
+}
+
+/* ─── Dark mode selector ───────────────────────────────────── */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ─── Custom Utilities ─────────────────────────────────────── */
+@utility text-gradient {
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-image: linear-gradient(to right, var(--color-teal), var(--color-purple));
+}
+
+@utility bg-gradient-brand {
+  background-image: linear-gradient(to right, var(--color-teal), var(--color-purple));
+}

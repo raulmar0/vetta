@@ -1,0 +1,43 @@
+---
+import type { Coach } from "../data/site";
+
+interface Props {
+  coach: Coach;
+}
+
+const { coach } = Astro.props;
+---
+
+<div
+  class="flex flex-col sm:flex-row items-center gap-8 bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-lg border border-slate-100 dark:border-slate-700"
+>
+  <button
+    class:list={[
+      "w-32 h-32 rounded-full overflow-hidden border-4 flex-shrink-0 cursor-pointer",
+      coach.borderColor === "teal" ? "border-teal" : "border-purple",
+    ]}
+    data-lightbox={coach.image}
+    data-lightbox-alt={coach.name}
+    type="button"
+  >
+    <img
+      alt={coach.name}
+      class="w-full h-full object-cover object-center"
+      src={coach.image}
+    />
+  </button>
+  <div class="text-center sm:text-left">
+    <h3 class="text-2xl font-display uppercase text-primary dark:text-white">
+      {coach.name}
+    </h3>
+    <p
+      class:list={[
+        "text-sm font-bold uppercase tracking-wider mb-2",
+        coach.borderColor === "teal" ? "text-teal" : "text-purple",
+      ]}
+    >
+      {coach.role}
+    </p>
+    <p class="text-slate-600 dark:text-slate-400 text-sm">{coach.description}</p>
+  </div>
+</div>

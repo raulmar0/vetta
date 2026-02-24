@@ -1,0 +1,89 @@
+---
+import type { CalendarEvent } from "../data/site";
+
+interface Props {
+  event: CalendarEvent;
+}
+
+const { event } = Astro.props;
+
+const typeBadgeColor: Record<string, string> = {
+  GRAVEL: "bg-primary",
+  XCM: "bg-purple",
+  XCO: "bg-teal",
+  RUTA: "bg-teal",
+  MTB: "bg-purple",
+  TRIATLON: "bg-amber-500",
+};
+
+const dateColor: Record<string, string> = {
+  GRAVEL: "text-teal",
+  XCM: "text-purple",
+  XCO: "text-teal",
+  RUTA: "text-teal",
+  MTB: "text-purple",
+  TRIATLON: "text-amber-500",
+};
+
+const gradientBg: Record<string, string> = {
+  GRAVEL: "from-primary to-teal",
+  XCM: "from-purple to-primary",
+  XCO: "from-teal to-primary",
+  RUTA: "from-teal to-purple",
+  MTB: "from-purple to-teal",
+  TRIATLON: "from-amber-500 to-primary",
+};
+---
+
+<div
+  class="group relative overflow-hidden rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-2xl transition duration-300"
+>
+  <div
+    class:list={[
+      "absolute top-0 right-0 text-white text-xs font-bold px-3 py-1 rounded-bl-lg z-10",
+      typeBadgeColor[event.type] ?? "bg-primary",
+    ]}
+  >
+    {event.type}
+  </div>
+  {event.image ? (
+    <div class="h-48 overflow-hidden">
+      <img
+        alt={event.title}
+        class="w-full h-full object-cover group-hover:scale-110 transition duration-700"
+        src={event.image}
+      />
+    </div>
+  ) : (
+    <div class:list={[
+      "h-48 bg-gradient-to-br flex items-center justify-center",
+      gradientBg[event.type] ?? "from-primary to-teal",
+    ]}>
+      <span class="material-icons text-white/30 text-6xl">directions_bike</span>
+    </div>
+  )}
+  <div class="p-6">
+    <div class="flex items-center justify-between mb-2">
+      <span
+        class:list={[
+          "text-sm font-bold uppercase tracking-wider",
+          dateColor[event.type] ?? "text-teal",
+        ]}
+      >
+        {event.date}
+      </span>
+      {event.distance && (
+        <span class="text-xs font-bold text-slate-400">{event.distance}</span>
+      )}
+    </div>
+    <h3
+      class="text-2xl font-display uppercase text-primary dark:text-white mb-2 group-hover:text-purple transition"
+    >
+      {event.title}
+    </h3>
+    <div class="flex items-center gap-2 text-slate-600 dark:text-slate-300">
+      <span class="material-icons text-sm">place</span>
+      <span class="text-sm font-medium">{event.location}</span>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,126 @@
+---
+import { navLinks, navCta } from "../data/site";
+---
+
+<nav
+  class="fixed w-full z-50 bg-white/90 dark:bg-bg-dark/90 backdrop-blur-sm border-b border-slate-200 dark:border-slate-800"
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between h-20 items-center">
+      <!-- Logo -->
+      <a href="/" class="flex-shrink-0 flex items-center">
+        <img src="/vetta-logo.png" alt="Vetta Pro Cycling" class="h-14 w-auto dark:hidden" />
+        <img src="/vetta-logo-white-letters.png" alt="Vetta Pro Cycling" class="h-14 w-auto hidden dark:block" />
+      </a>
+
+      <!-- Desktop Nav -->
+      <div class="hidden md:flex space-x-8 items-center">
+        {
+          navLinks.map((link) => (
+            <a
+              class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-teal font-medium uppercase tracking-wide text-sm transition"
+              href={link.href}
+            >
+              {link.label}
+            </a>
+          ))
+        }
+        <a
+          class="px-5 py-2 rounded-full bg-primary text-white font-bold text-sm uppercase tracking-wide hover:opacity-90 transition shadow-lg shadow-indigo-500/30"
+          href={navCta.href}
+        >
+          {navCta.label}
+        </a>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <div class="-mr-2 flex md:hidden">
+        <button
+          id="mobile-menu-btn"
+          class="relative inline-flex items-center justify-center w-10 h-10 rounded-md text-slate-400 hover:text-white hover:bg-slate-700 focus:outline-none transition"
+          type="button"
+        >
+          <span class="sr-only">Abrir menú</span>
+          <span class="material-icons mobile-icon-open absolute inset-0 flex items-center justify-center transition-all duration-300 opacity-100 rotate-0">menu</span>
+          <span class="material-icons mobile-icon-close absolute inset-0 flex items-center justify-center transition-all duration-300 opacity-0 rotate-90">close</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div
+    id="mobile-menu"
+    class="md:hidden bg-white dark:bg-bg-dark border-t border-slate-200 dark:border-slate-800 overflow-hidden transition-all duration-300 ease-in-out"
+    style="max-height: 0; opacity: 0;"
+  >
+    <div class="px-4 py-4 space-y-3">
+      {
+        navLinks.map((link) => (
+          <a
+            class="block text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-teal font-medium uppercase tracking-wide text-sm transition py-2"
+            href={link.href}
+          >
+            {link.label}
+          </a>
+        ))
+      }
+      <a
+        class="block px-5 py-2 rounded-full bg-primary text-white font-bold text-sm uppercase tracking-wide hover:opacity-90 transition shadow-lg shadow-indigo-500/30 text-center"
+        href={navCta.href}
+      >
+        {navCta.label}
+      </a>
+    </div>
+  </div>
+</nav>
+
+<script is:inline>
+  var menuBtn = document.getElementById("mobile-menu-btn");
+  var mobileMenu = document.getElementById("mobile-menu");
+  var iconOpen = menuBtn && menuBtn.querySelector(".mobile-icon-open");
+  var iconClose = menuBtn && menuBtn.querySelector(".mobile-icon-close");
+  var isOpen = false;
+
+  function setIcons(open) {
+    if (open) {
+      iconOpen.style.opacity = "0";
+      iconOpen.style.transform = "rotate(-90deg)";
+      iconClose.style.opacity = "1";
+      iconClose.style.transform = "rotate(0deg)";
+    } else {
+      iconOpen.style.opacity = "1";
+      iconOpen.style.transform = "rotate(0deg)";
+      iconClose.style.opacity = "0";
+      iconClose.style.transform = "rotate(90deg)";
+    }
+  }
+
+  function toggleMenu() {
+    isOpen = !isOpen;
+    if (isOpen) {
+      mobileMenu.style.maxHeight = mobileMenu.scrollHeight + "px";
+      mobileMenu.style.opacity = "1";
+    } else {
+      mobileMenu.style.maxHeight = "0";
+      mobileMenu.style.opacity = "0";
+    }
+    setIcons(isOpen);
+  }
+
+  function closeMenu() {
+    if (isOpen) {
+      isOpen = false;
+      mobileMenu.style.maxHeight = "0";
+      mobileMenu.style.opacity = "0";
+      setIcons(false);
+    }
+  }
+
+  if (menuBtn && mobileMenu) {
+    menuBtn.addEventListener("click", toggleMenu);
+    mobileMenu.querySelectorAll("a").forEach(function (link) {
+      link.addEventListener("click", closeMenu);
+    });
+  }
+</script>

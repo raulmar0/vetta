@@ -1,0 +1,146 @@
+---
+import { about } from "../data/site";
+
+const cards = [
+  { icon: "flag", color: "teal", title: about.mission.title, text: about.mission.text },
+  { icon: "visibility", color: "purple", title: about.vision.title, text: about.vision.text },
+];
+---
+
+<section class="py-20 bg-white dark:bg-slate-900" id="nosotros">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Heading -->
+    <div class="text-center mb-16">
+      <h2
+        class="text-4xl md:text-6xl font-display uppercase text-primary dark:text-white leading-none mb-4"
+      >
+        {about.heading.split(" ")[0]}
+        <span class="text-gradient">{about.heading.split(" ").slice(1).join(" ")}</span>
+      </h2>
+      <p class="text-lg text-slate-600 dark:text-slate-400 font-light max-w-2xl mx-auto">
+        {about.subtitle}
+      </p>
+    </div>
+
+    <!-- Mission & Vision: Desktop Grid -->
+    <div class="hidden md:grid md:grid-cols-2 gap-12 mb-16">
+      {cards.map((card) => (
+        <div class="bg-slate-50 dark:bg-slate-800 p-8 rounded-2xl border border-slate-100 dark:border-slate-700">
+          <div class="flex items-center gap-3 mb-4">
+            <span class:list={["material-icons text-3xl", card.color === "teal" ? "text-teal" : "text-purple"]}>{card.icon}</span>
+            <h3 class="text-2xl font-display uppercase text-primary dark:text-white">
+              {card.title}
+            </h3>
+          </div>
+          <p class="text-slate-600 dark:text-slate-400 leading-relaxed">
+            {card.text}
+          </p>
+        </div>
+      ))}
+    </div>
+
+    <!-- Mission & Vision: Mobile Carousel -->
+    <div class="md:hidden mb-16">
+      <div
+        id="mv-carousel"
+        class="flex gap-4 overflow-x-auto snap-x snap-mandatory -mx-4 px-4 pb-4"
+        style="scrollbar-width: none; -ms-overflow-style: none;"
+      >
+        {cards.map((card) => (
+          <div class="snap-center flex-shrink-0 w-[85vw]">
+            <div class="bg-slate-50 dark:bg-slate-800 p-6 rounded-2xl border border-slate-100 dark:border-slate-700 h-full">
+              <div class="flex items-center gap-3 mb-4">
+                <span class:list={["material-icons text-3xl", card.color === "teal" ? "text-teal" : "text-purple"]}>{card.icon}</span>
+                <h3 class="text-2xl font-display uppercase text-primary dark:text-white">
+                  {card.title}
+                </h3>
+              </div>
+              <p class="text-slate-600 dark:text-slate-400 leading-relaxed text-sm">
+                {card.text}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+      <!-- Dots -->
+      <div class="flex justify-center gap-2 mt-2" id="mv-dots">
+        {cards.map((_, i) => (
+          <button
+            class:list={[
+              "w-2.5 h-2.5 rounded-full transition cursor-pointer",
+              i === 0 ? "bg-teal" : "bg-slate-300 dark:bg-slate-600",
+            ]}
+            data-index={i}
+            type="button"
+          />
+        ))}
+      </div>
+    </div>
+
+    <!-- Highlight Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {
+        about.highlights.map((highlight, i) => (
+          <div class="flex items-start gap-5 bg-slate-50 dark:bg-slate-800 p-6 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-lg transition duration-300">
+            <div
+              class:list={[
+                "flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center",
+                i % 2 === 0
+                  ? "bg-teal/10 text-teal"
+                  : "bg-purple/10 text-purple",
+              ]}
+            >
+              <span class="material-icons text-2xl">{highlight.icon}</span>
+            </div>
+            <div>
+              <h3 class="text-lg font-bold text-primary dark:text-white uppercase tracking-wide mb-1">
+                {highlight.title}
+              </h3>
+              <p class="text-sm text-slate-600 dark:text-slate-400">
+                {highlight.description}
+              </p>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  #mv-carousel::-webkit-scrollbar { display: none; }
+</style>
+
+<script is:inline>
+  (function () {
+    var carousel = document.getElementById("mv-carousel");
+    var dotsContainer = document.getElementById("mv-dots");
+    if (!carousel || !dotsContainer) return;
+
+    var dots = dotsContainer.querySelectorAll("button");
+    var slides = carousel.children;
+
+    function updateDots() {
+      var scrollLeft = carousel.scrollLeft;
+      var slideWidth = slides[0].offsetWidth;
+      var gap = 16;
+      var idx = Math.round(scrollLeft / (slideWidth + gap));
+      idx = Math.max(0, Math.min(idx, dots.length - 1));
+      dots.forEach(function (dot, i) {
+        dot.className = "w-2.5 h-2.5 rounded-full transition cursor-pointer " +
+          (i === idx ? "bg-teal" : "bg-slate-300 dark:bg-slate-600");
+      });
+    }
+
+    carousel.addEventListener("scroll", updateDots);
+
+    dots.forEach(function (dot) {
+      dot.addEventListener("click", function () {
+        var idx = parseInt(dot.getAttribute("data-index"));
+        var slideWidth = slides[0].offsetWidth;
+        var gap = 16;
+        carousel.scrollTo({ left: idx * (slideWidth + gap), behavior: "smooth" });
+      });
+    });
+  })();
+</script>

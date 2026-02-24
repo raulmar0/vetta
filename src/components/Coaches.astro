@@ -1,0 +1,96 @@
+---
+import { coaches } from "../data/site";
+import CoachCard from "./CoachCard.astro";
+---
+
+<section class="py-20 bg-bg-light dark:bg-bg-dark relative" id="staff">
+  <div
+    class="absolute left-0 top-1/4 w-full h-64 bg-slate-100 dark:bg-slate-800/50 -skew-y-3 transform z-0"
+  >
+  </div>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <div class="text-center mb-16">
+      <h2
+        class="text-4xl md:text-6xl font-display uppercase text-primary dark:text-white"
+      >
+        Nuestro <span class="text-gradient">Staff</span>
+      </h2>
+      <p class="mt-4 text-slate-600 dark:text-slate-300">
+        Aprende de los mejores. Nuestro equipo trae años de experiencia competitiva y certificaciones profesionales.
+      </p>
+    </div>
+
+    <!-- Desktop Grid -->
+    <div class="hidden md:grid md:grid-cols-2 gap-12">
+      {coaches.map((coach) => <CoachCard coach={coach} />)}
+    </div>
+
+    <!-- Mobile Carousel -->
+    <div class="md:hidden">
+      <div
+        id="staff-carousel"
+        class="flex gap-4 overflow-x-auto snap-x snap-mandatory -mx-4 px-4 pb-4"
+        style="scrollbar-width: none; -ms-overflow-style: none;"
+      >
+        {coaches.map((coach) => (
+          <div class="snap-center flex-shrink-0 w-[85vw]">
+            <CoachCard coach={coach} />
+          </div>
+        ))}
+      </div>
+      <!-- Dots -->
+      <div class="flex justify-center gap-2 mt-2" id="staff-dots">
+        {coaches.map((_, i) => (
+          <button
+            class:list={[
+              "w-2.5 h-2.5 rounded-full transition cursor-pointer",
+              i === 0 ? "bg-teal" : "bg-slate-300 dark:bg-slate-600",
+            ]}
+            data-index={i}
+            type="button"
+          />
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  #staff-carousel::-webkit-scrollbar { display: none; }
+</style>
+
+<script is:inline>
+  (function () {
+    var carousel = document.getElementById("staff-carousel");
+    var dotsContainer = document.getElementById("staff-dots");
+    if (!carousel || !dotsContainer) return;
+
+    var dots = dotsContainer.querySelectorAll("button");
+    var slides = Array.from(carousel.children);
+
+    function updateDots() {
+      var scrollLeft = carousel.scrollLeft;
+      if (slides.length === 0) return;
+      var slideWidth = slides[0].offsetWidth;
+      var gap = 16;
+      var idx = Math.round(scrollLeft / (slideWidth + gap));
+      idx = Math.max(0, Math.min(idx, dots.length - 1));
+      dots.forEach(function (dot, i) {
+        dot.className = "w-2.5 h-2.5 rounded-full transition cursor-pointer " +
+          (i === idx ? "bg-teal" : "bg-slate-300 dark:bg-slate-600");
+      });
+    }
+
+    carousel.addEventListener("scroll", updateDots);
+
+    dots.forEach(function (dot) {
+      dot.addEventListener("click", function () {
+        var idx = parseInt(dot.getAttribute("data-index"));
+        if (slides.length === 0) return;
+        var slideWidth = slides[0].offsetWidth;
+        var gap = 16;
+        carousel.scrollTo({ left: idx * (slideWidth + gap), behavior: "smooth" });
+      });
+    });
+  })();
+</script>

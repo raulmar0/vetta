@@ -1,0 +1,45 @@
+---
+import { sponsors } from "../data/site";
+---
+
+{
+  sponsors.length > 0 && (
+    <section class="py-16 bg-white dark:bg-slate-900 border-y border-slate-100 dark:border-slate-800">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <p class="text-center text-sm font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-10">
+          Nuestros Patrocinadores
+        </p>
+        <div class="flex flex-wrap justify-center items-center gap-12">
+          {sponsors.map((sponsor) => (
+            sponsor.url ? (
+              <a
+                href={sponsor.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition duration-300"
+                title={sponsor.name}
+              >
+                <img
+                  src={sponsor.logo}
+                  alt={sponsor.name}
+                  class="h-12 md:h-16 w-auto object-contain"
+                />
+              </a>
+            ) : (
+              <div
+                class="grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition duration-300"
+                title={sponsor.name}
+              >
+                <img
+                  src={sponsor.logo}
+                  alt={sponsor.name}
+                  class="h-12 md:h-16 w-auto object-contain"
+                />
+              </div>
+            )
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}

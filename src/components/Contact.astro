@@ -1,0 +1,70 @@
+---
+import { contact } from "../data/site";
+---
+
+<section class="py-24 bg-primary text-white relative overflow-hidden" id="contacto">
+  <div
+    class="absolute top-0 right-0 w-64 h-64 bg-teal rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"
+  >
+  </div>
+  <div
+    class="absolute bottom-0 left-0 w-64 h-64 bg-purple rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"
+    style="animation-delay: 1s;"
+  >
+  </div>
+
+  <div class="max-w-4xl mx-auto px-4 relative z-10 text-center">
+    <h2 class="text-4xl sm:text-5xl md:text-7xl font-display uppercase mb-6">
+      {contact.heading} <span class="text-teal">{contact.headingAccent}</span>
+    </h2>
+    <p class="text-xl text-slate-300 mb-10 font-light">
+      {contact.subtitle}
+    </p>
+    <div
+      class="bg-white/10 backdrop-blur-md rounded-2xl p-8 md:p-12 border border-white/20"
+    >
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-0 text-center">
+        <!-- WhatsApp -->
+        <div class="py-6 md:py-0 md:px-8">
+          <span class="material-icons text-4xl text-teal mb-3">chat</span>
+          <h4 class="font-bold uppercase tracking-wider text-sm mb-2">
+            {contact.whatsapp.label}
+          </h4>
+          <a
+            class="text-xl font-display hover:text-teal transition"
+            href={contact.whatsapp.href}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {contact.whatsapp.value}
+          </a>
+        </div>
+
+        <!-- Email -->
+        <div class="py-6 md:py-0 md:px-8 border-t md:border-t-0 md:border-l border-white/20">
+          <span class="material-icons text-4xl text-purple mb-3">email</span>
+          <h4 class="font-bold uppercase tracking-wider text-sm mb-2">
+            {contact.email.label}
+          </h4>
+          <a
+            class="text-xl font-display hover:text-purple transition"
+            href={contact.email.href}
+          >
+            {contact.email.value}
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA Button -->
+    <a
+      href={contact.whatsapp.href}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="inline-flex items-center gap-3 mt-10 px-6 sm:px-10 py-4 sm:py-5 bg-teal text-primary font-bold uppercase tracking-widest text-sm sm:text-lg rounded-full hover:bg-white transition shadow-2xl transform hover:-translate-y-1"
+    >
+      <span class="material-icons">directions_bike</span>
+      Sé parte del pelotón
+    </a>
+  </div>
+</section>

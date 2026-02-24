@@ -1,0 +1,29 @@
+---
+import { stats } from "../data/site";
+---
+
+<div class="bg-primary py-12">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div
+      class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-x divide-white/10"
+    >
+      {
+        stats.map((stat) => (
+          <div class="p-2">
+            <span class="block text-4xl md:text-5xl font-display text-white mb-1">
+              {stat.value}
+            </span>
+            <span
+              class:list={[
+                "text-xs uppercase tracking-widest font-bold",
+                stat.color === "teal" ? "text-teal" : "text-purple",
+              ]}
+            >
+              {stat.label}
+            </span>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</div>

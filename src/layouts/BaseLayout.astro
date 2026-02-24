@@ -1,0 +1,126 @@
+---
+import "../styles/global.css";
+import { siteMetadata } from "../data/site";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title = siteMetadata.title, description = siteMetadata.description } =
+  Astro.props;
+---
+
+<html lang={siteMetadata.locale}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="/vetta-favicon.jpg" />
+    <link rel="icon" type="image/x-icon" href="/vetta-favicon.jpg" />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+    <script is:inline>
+      window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    </script>
+    <script is:inline defer src="/_vercel/insights/script.js"></script>
+  </head>
+  <body
+    class="bg-bg-light dark:bg-bg-dark text-slate-800 dark:text-slate-200 font-body transition-colors duration-300"
+  >
+    <slot />
+
+    <!-- Image Lightbox -->
+    <div
+      id="lightbox"
+      class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4 cursor-pointer"
+    >
+      <button
+        id="lightbox-close"
+        class="absolute top-4 right-4 text-white hover:text-teal transition cursor-pointer"
+        type="button"
+      >
+        <span class="material-icons text-4xl">close</span>
+      </button>
+      <img
+        id="lightbox-img"
+        alt=""
+        class="max-w-full max-h-[90vh] rounded-2xl object-contain shadow-2xl"
+      />
+    </div>
+
+    <!-- Dark mode toggle -->
+    <script is:inline>
+      // Apply dark mode based on system preference on load
+      if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        document.documentElement.classList.add("dark");
+      }
+
+      // Create toggle button
+      const toggleButton = document.createElement("button");
+      toggleButton.innerHTML =
+        '<span class="material-icons">' +
+        (document.documentElement.classList.contains("dark")
+          ? "light_mode"
+          : "dark_mode") +
+        "</span>";
+      toggleButton.className =
+        "fixed bottom-4 right-4 bg-primary text-white p-3 rounded-full shadow-lg z-50 hover:bg-slate-700 transition cursor-pointer";
+      toggleButton.onclick = () => {
+        document.documentElement.classList.toggle("dark");
+        if (document.documentElement.classList.contains("dark")) {
+          toggleButton.innerHTML =
+            '<span class="material-icons">light_mode</span>';
+        } else {
+          toggleButton.innerHTML =
+            '<span class="material-icons">dark_mode</span>';
+        }
+      };
+      document.body.appendChild(toggleButton);
+
+      // Lightbox
+      var lightbox = document.getElementById("lightbox");
+      var lightboxImg = document.getElementById("lightbox-img");
+      var lightboxClose = document.getElementById("lightbox-close");
+
+      function openLightbox(src, alt) {
+        if (lightbox && lightboxImg) {
+          lightboxImg.src = src;
+          lightboxImg.alt = alt || "";
+          lightbox.classList.remove("hidden");
+          lightbox.classList.add("flex");
+          document.body.style.overflow = "hidden";
+        }
+      }
+
+      function closeLightbox() {
+        if (lightbox) {
+          lightbox.classList.add("hidden");
+          lightbox.classList.remove("flex");
+          document.body.style.overflow = "";
+        }
+      }
+
+      document.querySelectorAll("[data-lightbox]").forEach(function (el) {
+        el.addEventListener("click", function () {
+          openLightbox(el.getAttribute("data-lightbox"), el.getAttribute("data-lightbox-alt"));
+        });
+      });
+
+      if (lightbox) {
+        lightbox.addEventListener("click", function (e) {
+          if (e.target === lightbox) closeLightbox();
+        });
+      }
+      if (lightboxClose) {
+        lightboxClose.addEventListener("click", closeLightbox);
+      }
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") closeLightbox();
+      });
+    </script>
+  </body>
+</html>
