@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css";
 import { siteMetadata } from "../data/site";
+import Analytics from "@vercel/analytics/astro";
 
 interface Props {
   title?: string;
@@ -23,14 +24,11 @@ const { title = siteMetadata.title, description = siteMetadata.description } =
     />
     <meta name="description" content={description} />
     <title>{title}</title>
-    <script is:inline>
-      window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
-    </script>
-    <script is:inline defer src="/_vercel/insights/script.js"></script>
   </head>
   <body
     class="bg-bg-light dark:bg-bg-dark text-slate-800 dark:text-slate-200 font-body transition-colors duration-300"
   >
+    <Analytics />
     <slot />
 
     <!-- Image Lightbox -->
